@@ -1,0 +1,23 @@
+-- Drop Table
+DROP TABLE movies;
+
+-- Create a Table to store result
+CREATE TABLE movies(name STRING, line STRING)
+
+--Add formatting 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+
+-- Skip heading of the file 
+TBLPROPERTIES ("skip.header.line.count"="2");
+
+-- Load data
+LOAD DATA LOCAL INPATH '/root/inputs' INTO TABLE movies;
+
+--Create a Table using the data from movies Table
+INSERT OVERWRITE LOCAL DIRECTORY '/root/hiveProjectOutput1' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+SELECT name, count(line) AS no_of_line FROM movies
+GROUP BY name
+ORDER BY no_of_line DESC;
+
+-- To View the final result
+SELECT * from movies;

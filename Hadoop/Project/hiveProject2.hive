@@ -1,0 +1,19 @@
+-- Drop Table
+DROP TABLE episodeIV;
+
+-- Create a Table named EpisodeIV to store result
+CREATE TABLE episodeIV(name STRING, line STRING)
+
+--Add formatting 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+
+-- Skip heading of the file 
+TBLPROPERTIES ("skip.header.line.count"="2");
+
+-- Load data
+LOAD DATA LOCAL INPATH '/root/inputs/episodeIV_dialogues.txt' INTO TABLE episodeIV;
+
+--Create a Table using the data from movies Table
+INSERT OVERWRITE LOCAL DIRECTORY '/root/hiveProjectOutput2' ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+SELECT COUNT(*) FROM episodeIV WHERE INSTR(line, 'Luke') > 0;
+-- SELECT COUNT(*) FROM episodeIV WHERE line LIKE '%Luke%' or line LIKE '%luke%';
